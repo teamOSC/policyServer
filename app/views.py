@@ -70,7 +70,12 @@ def main():
         barcode = request.args.post('barcode')
     except:
         barcode = request.args.get('barcode')
-    return json.dumps(str(barcode))
+
+    confidence = 0.5
+
+    conf = {"confidence": str(confidence)}
+
+    return jsonify(data=conf)
 
 
 @app.route('/analysis', methods=['GET'])
@@ -88,8 +93,11 @@ def analysis():
 
 @app.route('/admin')
 def admin():
-    userTweets = fetchTweet('sauravtom')
-    print type(userTweets), userTweets
+    try:
+        userTweets = fetchTweet('sauravtom')
+    except:
+        userTweets = []
+    #print type(userTweets), userTweets
     return render_template('admin.html', tweet=userTweets)
 
 
