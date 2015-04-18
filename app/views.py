@@ -72,10 +72,26 @@ def main():
     return json.dumps(str(barcode))
 
 
+@app.route('/feed')
+def feed():
+    userTweets = fetchTweet('sauravtom')
+    arr = []
+    for i in userTweets:
+    	d = {}
+    	d['title'] = i.text
+    	try:
+    		d['picture'] = i.media[0]['media_url']
+    	except:
+    		continue
+    	arr.append(d)
+    return jsonify(data=arr)
+
+
 @app.route('/admin')
 def admin():
     userTweets = fetchTweet('sauravtom')
     print type(userTweets), userTweets
+    return json.dumps(json.loads(userTweets[0]))
     return render_template('admin.html', tweet=userTweets)
 
 
