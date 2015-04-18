@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+        {% block content %}
+            <ul>
+            {% for i in tweet %}
+                <li>{{ i.text }}</li> <br>
+            {% endfor %}
+                </ul>
+        {% endblock %}
