@@ -91,13 +91,27 @@ def analysis():
         return render_template('analysis.html', states=states, query=0)
 
 
+@app.route('/feed')
+def feed():
+    userTweets = fetchTweet('sauravtom')
+    arr = []
+    for i in userTweets:
+    	d = {}
+    	d['title'] = i.text
+    	try:
+    		d['picture'] = i.media[0]['media_url']
+    	except:
+    		continue
+    	arr.append(d)
+    return jsonify(data=arr)
+
+
 @app.route('/admin')
 def admin():
     try:
         userTweets = fetchTweet('sauravtom')
     except:
         userTweets = []
-    #print type(userTweets), userTweets
     return render_template('admin.html', tweet=userTweets)
 
 
