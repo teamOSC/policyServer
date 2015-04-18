@@ -1,9 +1,40 @@
 from flask import Flask,render_template, flash, redirect, \
     make_response,request, url_for , session, g, jsonify
 
-import json
 from tweets import fetchTweet
 from app import app
+from dbHelper import DB
+import json,urllib2,xml,datetime,hashlib,time,requests,base64
+from base64 import b64encode
+from credentials import client_id,client_secret
+
+def upload_imgur(img_file=''):
+    headers = {"Authorization": "Client-ID %s"%client_id}
+    api_key = client_secret
+    url = "https://api.imgur.com/3/upload.json"
+
+    if not img_file:
+        img_data = b64encode(open('1.png', 'rb').read())
+    else:
+        img_data = b64encode(img_file.read())
+
+    response = requests.post(
+        url, 
+        headers = headers,
+        data = {
+            'key': api_key,
+            'image': img_data,
+            'type': 'base64',
+            'name': '1.jpg',
+            'title': 'Picture no. 1'
+        }
+    )
+    print response.text
+    if response.json()['status'] == 200:
+        return response.json()['data']['link']
+    else:
+        return ""
+
 
 @app.route('/upload',methods=['GET','POST'])
 def upload():
