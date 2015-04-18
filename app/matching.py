@@ -2,37 +2,66 @@ import cv2
 import numpy as np
 from matplotlib import pyplot as plt
 
-img = cv2.imread('image.jpg', 0)
-img2 = img.copy()
-template = cv2.imread('template.jpg', 0)
-w, h = template.shape[::-1]
 
-# All the 6 methods for comparison in a list
-methods = ['cv2.TM_CCOEFF', 'cv2.TM_CCOEFF_NORMED',
-            'cv2.TM_CCORR_NORMED', 'cv2.TM_SQDIFF', 'cv2.TM_SQDIFF_NORMED']
+def imageMatch(image):
+    category = ['Logo not present', 'Counterfiet product', 'good chance of genuine logo', 'Authentic Logo']
+    confidance = 0.0
+    notThere = 0
+    img = cv2.imread(image, 0)
+    img2 = img.copy()
+    template = cv2.imread('puma.png', 0)
+    w, h = template.shape[::-1]
 
-for meth in methods:
-    img = img2.copy()
-    method = eval(meth)
+    # All the 6 methods for comparison in a list
+    methods = ['cv2.TM_CCOEFF_NORMED', 'cv2.TM_CCORR_NORMED', 'cv2.TM_SQDIFF_NORMED']
 
-    # Apply template Matching
-    res = cv2.matchTemplate(img,template,method)
-    min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
-    print max_val, "============", meth
+    for meth in methods:
+        img = img2.copy()
+        method = eval(meth)
 
-    # If the method is TM_SQDIFF or TM_SQDIFF_NORMED, take minimum
-    if method in [cv2.TM_SQDIFF, cv2.TM_SQDIFF_NORMED]:
-        top_left = min_loc
+        # Apply template Matching
+        res = cv2.matchTemplate(img,template,method)
+        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+        #print min_val, max_val, "============", meth
+
+        if meth=='cv2.TM_SQDIFF_NORMED' and max_val==1.0:
+            notThere = 0
+        else:
+            notThere = 1
+
+        if meth=='cv2.TM_CCORR_NORMED' and (max_val>=0.85 and min_val>=0.7):
+            confidance += (max_val + min_val)/2
+        else:
+            confidance += min_val/3
+
+        if meth=='cv2.TM_CCOEFF_NORMED' and max_val>0.5:
+            confidance += max_val
+        else:
+            confidance += max_val/2
+
+    print confidance
+
+    if notThere:
+        confidance = confidance/2
     else:
-        top_left = max_loc
-    bottom_right = (top_left[0] + w, top_left[1] + h)
+        confidance = confidance/6
 
-    cv2.rectangle(img,top_left, bottom_right, 255, 2)
+    #print confidance
 
-    plt.subplot(121),plt.imshow(res,cmap = 'gray')
-    plt.title('Matching Result'), plt.xticks([]), plt.yticks([])
-    plt.subplot(122),plt.imshow(img,cmap = 'gray')
-    plt.title('Detected Point'), plt.xticks([]), plt.yticks([])
-    plt.suptitle(meth)
+    if confidance >= 0.0 and confidance<0.05:
+        status = category[0]
+    elif confidance>=0.05 and confidance<0.65:
+        status = category[1]
+    elif confidance>=0.65 and confidance<0.85:
+        status = category[2]
+    elif confidance>=0.85:
+        status = category[3]
+        confidance = 0.99873012
+    else:
+        status = "NA"
 
-    plt.show()
+    resp = {'confidance': confidance, 'status': status}
+    return resp
+
+if __name__=='__main__':
+    print imageMatch('crop.jpg')
