@@ -67,7 +67,7 @@ def upload():
 @app.route('/api/bar', methods=['GET', 'POST'])
 def main():
     try:
-        barcode = request.args.post('barcode')
+        barcode = request.form['barcode']
     except:
         barcode = request.args.get('barcode')
 
