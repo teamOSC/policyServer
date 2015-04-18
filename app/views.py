@@ -8,6 +8,7 @@ import json,urllib2,xml,datetime,hashlib,time,requests,base64
 from base64 import b64encode
 from credentials import client_id,client_secret
 
+
 def upload_imgur(img_file=''):
     headers = {"Authorization": "Client-ID %s"%client_id}
     api_key = client_secret
@@ -66,10 +67,28 @@ def upload():
 @app.route('/api/bar', methods=['GET', 'POST'])
 def main():
     try:
-        barcode = request.args.post('barcode')
+        barcode = request.form['barcode']
     except:
         barcode = request.args.get('barcode')
-    return json.dumps(str(barcode))
+
+    confidence = 0.5
+
+    conf = {"confidence": str(confidence)}
+
+    return jsonify(data=conf)
+
+
+@app.route('/analysis', methods=['GET'])
+def analysis():
+
+    state = request.args.get('state')
+    dist = request.args.get('dist')
+
+    if state is not None:
+        return render_template('analysis.html', state=state, query=1)
+    else:
+        states = ['Delhi', 'Uttar Pradesh', 'Haryana', 'Maharashtra', 'Andhra Pradesh']
+        return render_template('analysis.html', states=states, query=0)
 
 
 @app.route('/feed')
@@ -89,9 +108,10 @@ def feed():
 
 @app.route('/admin')
 def admin():
-    userTweets = fetchTweet('sauravtom')
-    print type(userTweets), userTweets
-    return json.dumps(json.loads(userTweets[0]))
+    try:
+        userTweets = fetchTweet('sauravtom')
+    except:
+        userTweets = []
     return render_template('admin.html', tweet=userTweets)
 
 

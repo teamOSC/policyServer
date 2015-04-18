@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+        {% block content %}
+        {% if query==0 %}
+        <form action="/analysis" method="get">
+            <select name="state">
+            {% for i in states %}
+
+            <option value="{{ i  }}">{{ i }}</option>
+
+            {% endfor %}
+            </select>
+            <button type="submit"  value="submit" >Submit</button>
+        {% else %}
+            <p>You selected the state : {{ state }}</p>
+            <p>The data for this state is as follows :</p>
+        {% endif %}
+
+
+        </form>
+
+        {% endblock %}
