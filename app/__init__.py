@@ -6,3 +6,5 @@ from app import views
 #app.secret_key = 'thisisarandomstring007becauseilovejamesbond'
 app.config['SECRET_KEY'] = 'thisisarandomstring007becauseilovejamesbond'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+
+#DataWeave key = fe56ada991a6d6d69fb6344bb2189b412bd404e8
