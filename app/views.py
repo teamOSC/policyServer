@@ -10,8 +10,10 @@ from credentials import client_id,client_secret
 from parse_rest.installation import Push
 from parse_rest.connection import register
 register('9nhyJ0OEkfqmGygl44OAYfdFdnapE27d9yj9UI5x', 'xsipM4oBX3sRx415UsWPXHCuuTPhetfmmrubRiPx', master_key=None)
+import multiprocessing
 
-def upload_imgur(img_file=''):
+
+def upload_imgur(img_file,img_url):
     headers = {"Authorization": "Client-ID %s"%client_id}
     api_key = client_secret
     url = "https://api.imgur.com/3/upload.json"
@@ -34,7 +36,8 @@ def upload_imgur(img_file=''):
     )
     print response.text
     if response.json()['status'] == 200:
-        return response.json()['data']['link']
+        img_url = response.json()['data']['link']
+        return img_url
     else:
         return ""
 
@@ -47,8 +50,10 @@ def upload():
     user_name = request.form['user_name']
     user_phone = request.form['user_phone']
     item_image = request.files['item_image']
-    img_url = upload_imgur(item_image)
-
+    #img_url = upload_imgur(item_image)
+    img_url=''
+    process = multiprocessing.Process(target=upload_imgur,args=(item_image,img_url))
+    
     D = DB()
     D.add_item(title, img_url,user_location,user_email,user_name)
     resp = jsonify(data="Success")
@@ -104,6 +109,7 @@ def feed():
         try:
             d['picture'] = i.media[0]['media_url']
         except:
+            continue
             d['picture'] = ""
         arr.append(d)
     return jsonify(data=arr)
