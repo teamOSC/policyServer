@@ -56,7 +56,7 @@ def upload():
     
     D = DB()
     D.add_item(title, img_url,user_location,user_email,user_name)
-    Push.message('Image has been uploaded successfully',channels=[""])
+    Push.message('Confidence rating is 70%',channels=[""])
     resp = jsonify(data="Success")
     resp.status_code = 200
     return resp
