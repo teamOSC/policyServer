@@ -50,12 +50,24 @@ google.maps.event.addDomListener(window, 'load', initialize);
 var map, pointarray, heatmap;
 
 var taxiData = [
-        [new google.maps.LatLng(23.0300, 72.5800), 12]
+        new google.maps.LatLng(24.0200, 72.5800),
+        new google.maps.LatLng(23.0300, 72.5900),
+        new google.maps.LatLng(23.0400, 72.5800),
+        new google.maps.LatLng(23.0300, 72.5700),
+        new google.maps.LatLng(23.300, 72.5800),
+
+        new google.maps.LatLng(30.7300, 76.7800),
+        new google.maps.LatLng(30.7400, 76.7800),
+
+        new google.maps.LatLng(26.8500, 80.9100),
+        new google.maps.LatLng(20.1500, 85.5000),
+        new google.maps.LatLng(20.1500, 85.5000),
+        new google.maps.LatLng(20.1500, 85.5000)
 ];
 
 function initialize() {
   var mapOptions = {
-    zoom: 7,
+    zoom: 4,
     center: new google.maps.LatLng(21.0000, 78.0000),
     mapTypeId: google.maps.MapTypeId.SATELLITE
   };
@@ -97,7 +109,7 @@ function changeGradient() {
 }
 
 function changeRadius() {
-  heatmap.set('radius', 200);
+  heatmap.set('radius', 9999);
 }
 
 function changeOpacity() {
