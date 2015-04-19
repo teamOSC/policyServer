@@ -13,7 +13,7 @@ register('9nhyJ0OEkfqmGygl44OAYfdFdnapE27d9yj9UI5x', 'xsipM4oBX3sRx415UsWPXHCuuT
 import multiprocessing
 
 
-def upload_imgur(img_file,img_url):
+def upload_imgur(img_file):
     headers = {"Authorization": "Client-ID %s"%client_id}
     api_key = client_secret
     url = "https://api.imgur.com/3/upload.json"
@@ -38,6 +38,7 @@ def upload_imgur(img_file,img_url):
     if response.json()['status'] == 200:
         img_url = response.json()['data']['link']
         return img_url
+        Push.message('Image has been uploaded successfully',channels=[""])
     else:
         return ""
 
@@ -50,9 +51,9 @@ def upload():
     user_name = request.form['user_name']
     user_phone = request.form['user_phone']
     item_image = request.files['item_image']
-    #img_url = upload_imgur(item_image)
-    img_url=''
-    process = multiprocessing.Process(target=upload_imgur,args=(item_image,img_url))
+    img_url = upload_imgur(item_image)
+    #img_url=''
+    #process = multiprocessing.Process(target=upload_imgur,args=(item_image,img_url))
     
     D = DB()
     D.add_item(title, img_url,user_location,user_email,user_name)
