@@ -61,7 +61,7 @@ def upload():
     print confidence
     D = DB()
     D.add_item(title, img_url,user_location,user_email,user_name)
-    Push.message('Confidence rating is '+str(confidence['confidence']*100), channels=[""])
+    Push.message(confidence, channels=[""])
     resp = jsonify(data=str(confidence['confidence']))
     resp.status_code = 200
     return resp
@@ -94,7 +94,8 @@ def main():
         barcode = request.args.get('barcode')
 
     confidence = 0.5
-    
+    D = DB()
+    D.add_bar(barcode, confidence)
     conf = {"confidence": str(confidence)}
 
     return jsonify(data=conf)
