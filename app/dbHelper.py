@@ -20,6 +20,22 @@ class DB:
         self.conn.commit()
         return item_id
 
+    def add_complaint(self,comp,location):
+        item_id = hashlib.md5(comp+location).hexdigest()[:5]
+
+        self.c.execute('''CREATE TABLE IF NOT EXISTS comp_table
+                     (item_id TEXT,complaint TEXT,location TEXT)''')
+        self.c.execute("INSERT INTO comp_table VALUES (?,?,?)",(item_id,comp,location))
+        self.conn.commit()
+
+    def add_bar(self,barcode,meta):
+        item_id = hashlib.md5(barcode+meta).hexdigest()[:5]
+
+        self.c.execute('''CREATE TABLE IF NOT EXISTS barcode_table
+                     (item_id TEXT,barcode TEXT,meta TEXT)''')
+        self.c.execute("INSERT INTO barcode_table VALUES (?,?,?)",(item_id,barcode,meta))
+        self.conn.commit()
+
     def exec_query(self,query):
         try:
             result_arr = []
@@ -35,6 +51,8 @@ def test():
     D = DB()
     print D.exec_query("Select item_id from image_table")
     print D.add_item("Something","http://i.imgur.com/jtta7D2.jpg","Address","food@gmail.com","saurav")
+    print D.add_complaint("Seeing lots of fake paracetamol medicines these days.",'Dehradun')
+    print D.add_bar('123123b12h3b123','Panteen Bottle 2l')
 
 if __name__ == '__main__':
     test()

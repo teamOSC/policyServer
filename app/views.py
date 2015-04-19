@@ -62,7 +62,7 @@ def upload():
     print confidence
     D = DB()
     D.add_item(title, img_url,user_location,user_email,user_name)
-    Push.message('Confidence rating is 70%',channels=[""])
+    Push.message(confidence,channels=[""])
     resp = jsonify(data="Success")
     resp.status_code = 200
     return resp
@@ -76,6 +76,9 @@ def manualComplaint():
     except:
         comp = request.args.get('complaint')
         location = request.args.get('location')
+
+    D = DB()
+    D.add_complaint(comp, location)
 
     loc = str(location).split(',')
     lat = loc[0]
@@ -92,7 +95,7 @@ def main():
         barcode = request.args.get('barcode')
 
     confidence = 0.5
-
+    
     conf = {"confidence": str(confidence)}
 
     return jsonify(data=conf)

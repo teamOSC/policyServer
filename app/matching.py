@@ -60,7 +60,7 @@ def imageMatch(image,image2):
     else:
         status = "NA"
 
-    resp = {'confidence': confidance, 'status': status}
+    resp = {'confidence': confidance, 'status': status, 'type':"counterfeit"}
     return resp
 
 if __name__=='__main__':
