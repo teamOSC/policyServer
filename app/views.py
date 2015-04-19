@@ -13,6 +13,7 @@ register('9nhyJ0OEkfqmGygl44OAYfdFdnapE27d9yj9UI5x', 'xsipM4oBX3sRx415UsWPXHCuuT
 import multiprocessing
 import os
 from matching import imageMatch
+from bot import pushTwitter
 
 
 def upload_imgur(img_file):
@@ -58,7 +59,9 @@ def upload():
     #img_url=''
     #process = multiprocessing.Process(target=upload_imgur,args=(item_image,img_url))
     confidence = imageMatch(os.path.join(app.config['UPLOAD_FOLDER']+"/tmp", item_image.filename), os.path.join(app.config['UPLOAD_FOLDER'], "puma.png"))
-    print confidence
+
+    #pushTwitter(os.path.join(app.config['UPLOAD_FOLDER']+"/tmp", item_image.filename),'hi')
+
     D = DB()
     D.add_item(title, img_url,user_location,user_email,user_name)
     Push.message(confidence, channels=[""])
@@ -123,7 +126,7 @@ def push():
 
 @app.route('/feed')
 def feed():
-    userTweets = fetchTweet('sauravtom')
+    userTweets = fetchTweet('jaaag0')
     arr = []
     for i in userTweets:
         d = {}
@@ -151,8 +154,20 @@ def analysis():
 
 @app.route('/admin')
 def admin():
+    userTweets = fetchTweet('jaaag0')
+    arr = []
+    for i in userTweets:
+        d = {}
+        d['title'] = i.text
+        d['id'] = i.id
+        try:
+            d['picture'] = i.media[0]['media_url']
+        except:
+            continue
+            d['picture'] = ""
+        arr.append(d)
+    return render_template('admin.html', arr=arr)
 
-    return render_template('admin.html')
 
 
 @app.route('/mainFeed')
