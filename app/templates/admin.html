@@ -12,18 +12,23 @@
             .right{
                 float:right;
             }
+            img{
+                height:100px;
+            }
             </style>
         {% endblock %}
 
         {% block content %}
         	<br>
 
-        <p align="center">Welcome to the Admin Panel</p>
+        <p align="center">Welcome to the Admin Panel
+        <br>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-default btn-lg right fixed"  data-toggle="modal" data-target="#myModal">
+                Send Push notification to App users
+            </button>
+        </p>
 
-        	<!-- Button trigger modal -->
-        	<button class="right" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-        	  Send Push notification to App users
-        	</button>
         	<br><br>
         	<!-- Modal -->
         	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -45,6 +50,18 @@
         	</div>
 
             The top reports from users are here:
+
+            <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+            {% for i in arr %}
+                <li>
+                    <blockquote class="twitter-tweet" lang="en"><p>{{i.text}}<a href="http://t.co/QdFqlimgAO">{{i.picture}}</a></p>&mdash; Jaago (@jaaag0) <a href="https://twitter.com/jaaag0/status/{{i.id}}"></a></blockquote>
+                    
+                </li>
+            {% endfor %}
+
+                
+
         {% endblock %}
 
 {% block script %}

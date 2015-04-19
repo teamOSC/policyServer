@@ -26,9 +26,9 @@ class Bot():
 
 
 def pushTwitter(media,text=''):
-    t = api.update_with_media(media, status=text)
     b = Bot()
     api = b.api
+    t = api.update_with_media(media, status=text)
 
 
 if __name__ == '__main__':

@@ -59,9 +59,8 @@ def upload():
     #img_url=''
     #process = multiprocessing.Process(target=upload_imgur,args=(item_image,img_url))
     confidence = imageMatch(os.path.join(app.config['UPLOAD_FOLDER']+"/tmp", item_image.filename), os.path.join(app.config['UPLOAD_FOLDER'], "puma.png"))
-    print confidence
 
-    pushTwitter(os.path.join(app.config['UPLOAD_FOLDER']+"/tmp", item_image.filename),'hi')
+    #pushTwitter(os.path.join(app.config['UPLOAD_FOLDER']+"/tmp", item_image.filename),'hi')
 
     D = DB()
     D.add_item(title, img_url,user_location,user_email,user_name)
@@ -118,7 +117,7 @@ def push():
 
 @app.route('/feed')
 def feed():
-    userTweets = fetchTweet('sauravtom')
+    userTweets = fetchTweet('jaaag0')
     arr = []
     for i in userTweets:
         d = {}
@@ -146,7 +145,19 @@ def analysis():
 
 @app.route('/admin')
 def admin():
-    return render_template('admin.html')
+    userTweets = fetchTweet('jaaag0')
+    arr = []
+    for i in userTweets:
+        d = {}
+        d['title'] = i.text
+        d['id'] = i.id
+        try:
+            d['picture'] = i.media[0]['media_url']
+        except:
+            continue
+            d['picture'] = ""
+        arr.append(d)
+    return render_template('admin.html',arr=arr)
 
 
 @app.route('/mainFeed')
