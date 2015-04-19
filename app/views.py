@@ -11,6 +11,8 @@ from parse_rest.installation import Push
 from parse_rest.connection import register
 register('9nhyJ0OEkfqmGygl44OAYfdFdnapE27d9yj9UI5x', 'xsipM4oBX3sRx415UsWPXHCuuTPhetfmmrubRiPx', master_key=None)
 import multiprocessing
+import os
+from matching import imageMatch
 
 
 def upload_imgur(img_file):
@@ -50,10 +52,13 @@ def upload():
     user_name = request.form['user_name']
     user_phone = request.form['user_phone']
     item_image = request.files['item_image']
+    item_image.save(os.path.join(app.config['UPLOAD_FOLDER']+"/tmp", item_image.filename))
+
     img_url = upload_imgur(item_image)
     #img_url=''
     #process = multiprocessing.Process(target=upload_imgur,args=(item_image,img_url))
-    
+    confidence = imageMatch(os.path.join(app.config['UPLOAD_FOLDER']+"/tmp", item_image.filename))
+    print confidence
     D = DB()
     D.add_item(title, img_url,user_location,user_email,user_name)
     Push.message('Confidence rating is 70%',channels=[""])

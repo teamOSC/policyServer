@@ -1,7 +1,9 @@
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
+import os
 
+tmp_dir = os.getcwd() + '/tmp/'
 
 def imageMatch(image):
     category = ['Logo not present', 'Counterfiet product', 'good chance of genuine logo', 'Authentic Logo']
@@ -9,7 +11,8 @@ def imageMatch(image):
     notThere = 0
     img = cv2.imread(image, 0)
     img2 = img.copy()
-    template = cv2.imread('puma.png', 0)
+    template = cv2.imread(tmp_dir + 'puma.png', 0)
+    print tmp_dir + 'puma.png'
     w, h = template.shape[::-1]
 
     # All the 6 methods for comparison in a list
@@ -60,10 +63,9 @@ def imageMatch(image):
     else:
         status = "NA"
 
-    resp = {'confidance': confidance, 'status': status}
+    resp = {'confidence': confidance, 'status': status}
     return resp
 
 if __name__=='__main__':
     print imageMatch('crop.jpg')
 
-    
