@@ -63,6 +63,22 @@ def upload():
     return resp
 
 
+@app.route('/api/complaint', methods=['GET', 'POST'])
+def manualComplaint():
+    try:
+        comp = request.form['complaint']
+        location = request.form['location']
+    except:
+        comp = request.args.get('complaint')
+        location = request.args.get('location')
+
+    loc = str(location).split(',')
+    lat = loc[0]
+    lon = loc[1]
+
+    return jsonify("your complaint has been registered")
+
+
 @app.route('/api/bar', methods=['GET', 'POST'])
 def main():
     try:
