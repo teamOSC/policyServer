@@ -2,8 +2,8 @@ import cv2
 import numpy as np
 from matplotlib import pyplot as plt
 
-def imageMatch(image,image2):
-    print image,image2
+def imageMatch(image, image2):
+    print image, image2
     category = ['Logo not present', 'Counterfiet product', 'good chance of genuine logo', 'Authentic Logo']
     confidance = 0.0
     notThere = 0
@@ -64,5 +64,5 @@ def imageMatch(image,image2):
     return resp
 
 if __name__=='__main__':
-    print imageMatch('crop.jpg', 'puma.png')
+    print imageMatch("crop.jpg", "puma.png")
 
