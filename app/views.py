@@ -122,16 +122,21 @@ def analysis():
         return render_template('analysis.html', states=states, query=0)
 
 
-
 @app.route('/admin')
 def admin():
-    try:
-        userTweets = fetchTweet('sauravtom')
-    except:
-        userTweets = []
-    return render_template('admin.html', tweet=userTweets)
+    return render_template('admin.html')
 
 
-@app.route('/admin/warnLocal')
-def localWarn():
-    pass
+@app.route('/mainFeed')
+def mainFeed():
+    userTweets = fetchTweet('sauravtom')
+    arr = []
+    for i in userTweets:
+        d = {}
+        d['title'] = i.text
+        try:
+            d['picture'] = i.media[0]['media_url']
+        except:
+            d['picture'] = ""
+        arr.append(d)
+    return render_template('feed.html', arr=arr)

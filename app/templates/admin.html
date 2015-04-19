@@ -2,6 +2,9 @@
 
         {% block content %}
         	<br>
+
+        <p align="center">Welcome to the Admin Panel</p>
+
         	<!-- Button trigger modal -->
         	<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
         	  Beam Up Scotty
@@ -27,11 +30,7 @@
         	  </div>
         	</div>
 
-            <ul>
-            {% for i in tweet %}
-                <li>{{ i.text }}</li> <br>
-            {% endfor %}
-                </ul>
+            The top reports from users are here:
         {% endblock %}
 
 {% block script %}
