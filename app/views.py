@@ -7,7 +7,9 @@ from dbHelper import DB
 import json,urllib2,xml,datetime,hashlib,time,requests,base64
 from base64 import b64encode
 from credentials import client_id,client_secret
-
+from parse_rest.installation import Push
+from parse_rest.connection import register
+register('9nhyJ0OEkfqmGygl44OAYfdFdnapE27d9yj9UI5x', 'xsipM4oBX3sRx415UsWPXHCuuTPhetfmmrubRiPx', master_key=None)
 
 def upload_imgur(img_file=''):
     headers = {"Authorization": "Client-ID %s"%client_id}
@@ -42,8 +44,6 @@ def upload():
     if request.method == 'GET':
         return render_template('index.html')
 
-    print request.form
-    print request.files
     title = request.form['title']
     user_location = request.form['user_location']
     user_email = request.form['user_email']
@@ -57,8 +57,7 @@ def upload():
         img_url = upload_imgur(item_image)
 
     D = DB()
-    date_ = datetime.datetime.now().strftime("%d/%m/%Y,%H:%M")
-    item_id = D.add_item(title, img_url,user_location,user_email,user_name)
+    D.add_item(title, img_url,user_location,user_email,user_name)
     resp = jsonify(data={"Success"})
     resp.status_code = 200
     return resp
@@ -78,17 +77,12 @@ def main():
     return jsonify(data=conf)
 
 
-@app.route('/analysis', methods=['GET'])
-def analysis():
+@app.route('/api/push',methods=['GET'])
+def push():
+	msg = request.args.get('msg')
+	Push.message(msg,channels=[""])
+	return jsonify(data="success")
 
-    state = request.args.get('state')
-    dist = request.args.get('dist')
-
-    if state is not None:
-        return render_template('analysis.html', state=state, query=1)
-    else:
-        states = ['Delhi', 'Uttar Pradesh', 'Haryana', 'Maharashtra', 'Andhra Pradesh']
-        return render_template('analysis.html', states=states, query=0)
 
 
 @app.route('/feed')
@@ -101,9 +95,23 @@ def feed():
     	try:
     		d['picture'] = i.media[0]['media_url']
     	except:
-    		continue
+    		d['picture'] = ""
     	arr.append(d)
     return jsonify(data=arr)
+
+
+@app.route('/analysis', methods=['GET'])
+def analysis():
+
+    state = request.args.get('state')
+    dist = request.args.get('dist')
+
+    if state is not None:
+        return render_template('analysis.html', state=state, query=1)
+    else:
+        states = ['Delhi', 'Uttar Pradesh', 'Haryana', 'Maharashtra', 'Andhra Pradesh']
+        return render_template('analysis.html', states=states, query=0)
+
 
 
 @app.route('/admin')
