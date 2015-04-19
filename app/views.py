@@ -57,13 +57,12 @@ def upload():
     img_url = upload_imgur(item_image)
     #img_url=''
     #process = multiprocessing.Process(target=upload_imgur,args=(item_image,img_url))
-    confidence = imageMatch(os.path.join(app.config['UPLOAD_FOLDER']+"/tmp", item_image.filename),\
-        os.path.join(app.config['UPLOAD_FOLDER'], "puma.png"))
+    confidence = imageMatch(os.path.join(app.config['UPLOAD_FOLDER']+"/tmp", item_image.filename), os.path.join(app.config['UPLOAD_FOLDER'], "puma.png"))
     print confidence
     D = DB()
     D.add_item(title, img_url,user_location,user_email,user_name)
-    Push.message(confidence,channels=[""])
-    resp = jsonify(data="Success")
+    Push.message('Confidence rating is '+str(confidence['confidence']*100), channels=[""])
+    resp = jsonify(data=str(confidence['confidence']))
     resp.status_code = 200
     return resp
 
@@ -104,7 +103,10 @@ def main():
 @app.route('/api/push',methods=['GET'])
 def push():
     msg = request.args.get('msg')
-    Push.message(msg,channels=[""])
+    d ={}
+    d['msg'] = msg
+    d['type'] = 'push'
+    Push.message(json.dumps(d),channels=[""])
     return jsonify(data="success")
 
 
@@ -127,7 +129,6 @@ def feed():
 
 @app.route('/analysis', methods=['GET'])
 def analysis():
-
     state = request.args.get('state')
     dist = request.args.get('dist')
 
