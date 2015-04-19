@@ -57,13 +57,12 @@ def upload():
     img_url = upload_imgur(item_image)
     #img_url=''
     #process = multiprocessing.Process(target=upload_imgur,args=(item_image,img_url))
-    confidence = imageMatch(os.path.join(app.config['UPLOAD_FOLDER']+"/tmp", item_image.filename),\
-        os.path.join(app.config['UPLOAD_FOLDER'], "puma.png"))
+    confidence = imageMatch(os.path.join(app.config['UPLOAD_FOLDER']+"/tmp", item_image.filename), os.path.join(app.config['UPLOAD_FOLDER'], "puma.png"))
     print confidence
     D = DB()
     D.add_item(title, img_url,user_location,user_email,user_name)
     Push.message('Confidence rating is 70%',channels=[""])
-    resp = jsonify(data="Success")
+    resp = jsonify(data=str(confidence))
     resp.status_code = 200
     return resp
 

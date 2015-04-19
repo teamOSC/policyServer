@@ -64,5 +64,5 @@ def imageMatch(image,image2):
     return resp
 
 if __name__=='__main__':
-    print imageMatch('crop.jpg')
+    print imageMatch('crop.jpg', 'puma.png')
 
