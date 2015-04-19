@@ -1,5 +1,17 @@
 {% extends "base.html" %}
 
+        {% block head %}
+
+        <style>
+             table, th, td {
+   border: 1px solid black;
+                    font-size: 15px;
+                    align-content: center;
+}
+        </style>
+
+        {% endblock %}
+
         {% block content %}
         	<br>
 
@@ -11,5 +23,21 @@
 
         {% endfor %}
         </ul>
+
+         The top reports from users are here:
+
+       <table>
+           <tr>
+           <th>Complaints</th>
+           <th>Location</th></tr>
+           {% for rep in reports %}
+
+           <tr>
+               <td>{{ rep['complaint'] }}</td>
+               <td>{{ rep['location'] }}</td>
+           </tr>
+
+           {% endfor %}
+        </table>
 
         {% endblock %}

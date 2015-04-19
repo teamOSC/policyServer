@@ -166,19 +166,18 @@ def admin():
             continue
             d['picture'] = ""
         arr.append(d)
-    return render_template('admin.html',arr=arr)
+    return render_template('admin.html', arr=arr)
+
 
 
 @app.route('/mainFeed')
 def mainFeed():
-    userTweets = fetchTweet('sauravtom')
-    arr = []
-    for i in userTweets:
-        d = {}
-        d['title'] = i.text
-        try:
-            d['picture'] = i.media[0]['media_url']
-        except:
-            d['picture'] = ""
-        arr.append(d)
-    return render_template('feed.html', arr=arr)
+    reports = [
+        {'complaint': 'Sir I found a fake bottle container of Coke at a shop near my home. I am sending the photo of the bottle from the app.', 'location': 'Ahmedabad'},
+        {'complaint': 'A shop is selling fake clothes in the name of original brands, and taking a lot of money for that!', 'location': 'Odisha'},
+        {'complaint': 'Adulteration in milk packets in a dairy in my area. I am sending this report. please take some action.', 'location': 'Haryana'},
+        {'complaint': 'Branded rice bags are sold fake here. I sent the logo and the bar code of the product to your website.', 'location': 'Haryana'},
+        {'complaint': 'Chemist is selling fake/expired medicines and he is also not giving bills for that. please look into this.', 'location': 'Ahmedabad'},
+    ]
+
+    return render_template('feed.html', reports=reports)
