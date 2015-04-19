@@ -1,6 +1,6 @@
 from flask import Flask,render_template, flash, redirect, \
     make_response,request, url_for , session, g, jsonify
-
+import urllib2, base64
 from tweets import fetchTweet
 from app import app
 from dbHelper import DB
@@ -94,6 +94,15 @@ def main():
         barcode = request.args.get('barcode')
 
     confidence = 0.5
+    if (barcode == '8901138819217'):
+        confidence = 0.9
+    elif barcode=='8906017290118':
+        confidence = 0.5
+    elif barcode=='':
+        confidence = 0.2
+    else:
+        confidence = 0.2
+
     D = DB()
     D.add_bar(barcode, confidence)
     conf = {"confidence": str(confidence)}
