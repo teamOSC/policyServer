@@ -7,7 +7,9 @@ from dbHelper import DB
 import json,urllib2,xml,datetime,hashlib,time,requests,base64
 from base64 import b64encode
 from credentials import client_id,client_secret
-
+from parse_rest.installation import Push
+from parse_rest.connection import register
+register('9nhyJ0OEkfqmGygl44OAYfdFdnapE27d9yj9UI5x', 'xsipM4oBX3sRx415UsWPXHCuuTPhetfmmrubRiPx', master_key=None)
 
 def upload_imgur(img_file=''):
     headers = {"Authorization": "Client-ID %s"%client_id}
@@ -77,6 +79,28 @@ def main():
 
     return jsonify(data=conf)
 
+@app.route('/api/push',methods=['GET'])
+def push():
+	msg = request.args.get('msg')
+	Push.message(msg,channels=[""])
+	return jsonify(data="success")
+
+
+
+@app.route('/feed')
+def feed():
+    userTweets = fetchTweet('sauravtom')
+    arr = []
+    for i in userTweets:
+    	d = {}
+    	d['title'] = i.text
+    	try:
+    		d['picture'] = i.media[0]['media_url']
+    	except:
+    		d['picture'] = ""
+    	arr.append(d)
+    return jsonify(data=arr)
+
 
 @app.route('/analysis', methods=['GET'])
 def analysis():
@@ -90,20 +114,6 @@ def analysis():
         states = ['Delhi', 'Uttar Pradesh', 'Haryana', 'Maharashtra', 'Andhra Pradesh']
         return render_template('analysis.html', states=states, query=0)
 
-
-@app.route('/feed')
-def feed():
-    userTweets = fetchTweet('sauravtom')
-    arr = []
-    for i in userTweets:
-    	d = {}
-    	d['title'] = i.text
-    	try:
-    		d['picture'] = i.media[0]['media_url']
-    	except:
-    		continue
-    	arr.append(d)
-    return jsonify(data=arr)
 
 
 @app.route('/admin')
