@@ -6,7 +6,7 @@ api = twitter.Api(consumer_key='2RJYLeeXVWftefdtvkKwIO7Wl',
                   access_token_secret='ofTjnhSaKLxY5s8cPI5gI13xPfnVRCNItc8yIJ4ZjgTTP')
 
 def fetchTweet(user):
-    numbers = 10
+    numbers = 30
     statuses = api.GetUserTimeline(screen_name = user, count = numbers)
 
     '''tweet = ""

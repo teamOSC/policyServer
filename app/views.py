@@ -38,7 +38,6 @@ def upload_imgur(img_file):
     if response.json()['status'] == 200:
         img_url = response.json()['data']['link']
         return img_url
-        Push.message('Image has been uploaded successfully',channels=[""])
     else:
         return ""
 
@@ -57,6 +56,7 @@ def upload():
     
     D = DB()
     D.add_item(title, img_url,user_location,user_email,user_name)
+    Push.message('Image has been uploaded successfully',channels=[""])
     resp = jsonify(data="Success")
     resp.status_code = 200
     return resp
