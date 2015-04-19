@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+        {% block content %}
+        	<br>
+
+        <p align="center">Welcome to the Main User Feed</p>
+        <ul><hr>
+        {% for tweet in arr %}
+
+        <li>{{ tweet['title'] }}</li><hr>
+
+        {% endfor %}
+        </ul>
+
+        {% endblock %}
