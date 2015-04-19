@@ -44,8 +44,6 @@ def upload():
     if request.method == 'GET':
         return render_template('index.html')
 
-    print request.form
-    print request.files
     title = request.form['title']
     user_location = request.form['user_location']
     user_email = request.form['user_email']
@@ -59,8 +57,7 @@ def upload():
         img_url = upload_imgur(item_image)
 
     D = DB()
-    date_ = datetime.datetime.now().strftime("%d/%m/%Y,%H:%M")
-    item_id = D.add_item(title, img_url,user_location,user_email,user_name)
+    D.add_item(title, img_url,user_location,user_email,user_name)
     resp = jsonify(data={"Success"})
     resp.status_code = 200
     return resp
@@ -78,6 +75,7 @@ def main():
     conf = {"confidence": str(confidence)}
 
     return jsonify(data=conf)
+
 
 @app.route('/api/push',methods=['GET'])
 def push():
