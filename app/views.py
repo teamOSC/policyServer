@@ -61,7 +61,7 @@ def upload():
     print confidence
     D = DB()
     D.add_item(title, img_url,user_location,user_email,user_name)
-    Push.message('Confidence rating is 70%',channels=[""])
+    Push.message('Confidence rating is '+str(confidence['confidence']*100), channels=[""])
     resp = jsonify(data=str(confidence['confidence']))
     resp.status_code = 200
     return resp
