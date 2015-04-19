@@ -41,24 +41,17 @@ def upload_imgur(img_file=''):
 
 @app.route('/upload',methods=['GET','POST'])
 def upload():
-    if request.method == 'GET':
-        return render_template('index.html')
-
     title = request.form['title']
     user_location = request.form['user_location']
     user_email = request.form['user_email']
     user_name = request.form['user_name']
     user_phone = request.form['user_phone']
-
-    try:
-        img_url = request.form['image_url']
-    except:
-        item_image = request.files['item_image']
-        img_url = upload_imgur(item_image)
+    item_image = request.files['item_image']
+    img_url = upload_imgur(item_image)
 
     D = DB()
     D.add_item(title, img_url,user_location,user_email,user_name)
-    resp = jsonify(data={"Success"})
+    resp = jsonify(data="Success")
     resp.status_code = 200
     return resp
 
@@ -79,9 +72,9 @@ def main():
 
 @app.route('/api/push',methods=['GET'])
 def push():
-	msg = request.args.get('msg')
-	Push.message(msg,channels=[""])
-	return jsonify(data="success")
+    msg = request.args.get('msg')
+    Push.message(msg,channels=[""])
+    return jsonify(data="success")
 
 
 
@@ -90,13 +83,13 @@ def feed():
     userTweets = fetchTweet('sauravtom')
     arr = []
     for i in userTweets:
-    	d = {}
-    	d['title'] = i.text
-    	try:
-    		d['picture'] = i.media[0]['media_url']
-    	except:
-    		d['picture'] = ""
-    	arr.append(d)
+        d = {}
+        d['title'] = i.text
+        try:
+            d['picture'] = i.media[0]['media_url']
+        except:
+            d['picture'] = ""
+        arr.append(d)
     return jsonify(data=arr)
 
 
